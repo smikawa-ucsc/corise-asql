@@ -43,4 +43,6 @@ where
     (customer_state = 'KY' and (trim(city_name) ilike any('%concord%', '%georgetown%', '%ashland%'))) /*ilike any to reduce comparisons */  
     or (customer_state = 'CA' and (trim(city_name) ilike any('%oakland%', '%pleasant hill%'))) /*ilike any to reduce comparisons */  
     or (customer_state = 'TX' and (trim(city_name) ilike '%arlington%')   
-    or trim(city_name) ilike '%brownsville%') /* Formatting was confusing here. brownsville is not treated like other cities and restricted to TX, it seems to be an overall OR condition as written.  It's formatted without a newline as if it's a city+state comparison like the others.Ambiguous wether intentional or an accident */
+    or trim(city_name) ilike '%brownsville%') 
+    /* Formatting was confusing for brownsville. It's not treated like other cities and is not restricted to TX; it seems to be an overall OR condition as written.    
+    It's formatted without a newline as if it's a city+state comparison like the others.Ambiguous wether intentional or an accident */
