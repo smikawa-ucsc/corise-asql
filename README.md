@@ -1,1 +1,1 @@
-# corise-asql
+For Advanced SQL Exercises
