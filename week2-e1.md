@@ -45,4 +45,4 @@ where
     or (customer_state = 'TX' and (trim(city_name) ilike '%arlington%')   
     or trim(city_name) ilike '%brownsville%') 
     /* Formatting was confusing for brownsville. It's not treated like other cities and is not restricted to TX; it seems to be an overall OR condition as written.    
-    It's formatted without a newline as if it's a city+state comparison like the others.Ambiguous wether intentional or an accident */
+    It's formatted without a newline as if it's a city+state comparison like the others. Ambiguous whether intentional or an accident */
