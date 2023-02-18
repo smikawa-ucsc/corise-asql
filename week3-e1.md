@@ -1,7 +1,7 @@
 with top_recipe as (
     select 
     	parse_json(event_details):recipe_id as recipe_id, 
-        count(*) as recipe_views
+        count(*) as recipe_view
     from vk_data.events.website_activity
     where parse_json(event_details):event = 'view_recipe'
     group by 1
@@ -10,9 +10,12 @@ with top_recipe as (
 ),
 
 total_unique_sessions as (
-    select 
-    	count(distinct session_id) as unique_sessions
-    from vk_data.events.website_activity
+    select count(*) as unique_sessions
+    from (
+        select count(session_id)
+        from vk_data.events.website_activity
+        group by session_id)
+    
 ),
 
 session_lengths as (
