@@ -67,12 +67,3 @@ from top_recipes as tr
 	left join daily_session_lengths as dsl on tr.dayt = dsl.dayt
     left join daily_unique_sessions as dus on tr.dayt = dus.dayt
 order by dayt
-
-/*select * from vk_data.events.website_activity*/
-/*
-	select session_id, sum( case when parse_json(event_details):event = 'view_recipe' then 1 else 0 end)
-    from vk_data.events.website_activity
-    group by 1
-*/
-/* { "event":"view_recipe", "page":"recipe", "recipe_id":"44dcd777-5b10-41e2-90df-4dca4b696971" } */
-
