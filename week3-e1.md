@@ -1,3 +1,4 @@
+/* 859 ms */
 with top_recipes as (
     select 
     	parse_json(event_details):recipe_id as recipe_id,
@@ -29,6 +30,7 @@ session_lengths as (
     from vk_data.events.website_activity 
     group by 1, 2
     having session_length > 0
+    order by dayt
 ),
 
 daily_session_lengths as (
@@ -61,8 +63,16 @@ daily_search_average as (
 
 select tr.dayt, recipe_id, average_session_length, average_searches, session_count
 from top_recipes as tr 
-	natural join daily_search_average 
-	natural join daily_session_lengths
-    natural join daily_unique_sessions
+	left join daily_search_average as dsa on tr.dayt = dsa.dayt 
+	left join daily_session_lengths as dsl on tr.dayt = dsl.dayt
+    left join daily_unique_sessions as dus on tr.dayt = dus.dayt
 order by dayt
+
+/*select * from vk_data.events.website_activity*/
+/*
+	select session_id, sum( case when parse_json(event_details):event = 'view_recipe' then 1 else 0 end)
+    from vk_data.events.website_activity
+    group by 1
+*/
+/* { "event":"view_recipe", "page":"recipe", "recipe_id":"44dcd777-5b10-41e2-90df-4dca4b696971" } */
 
