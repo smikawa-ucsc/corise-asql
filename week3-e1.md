@@ -1,4 +1,4 @@
-/* 859 ms */
+
 with top_recipes as (
     select 
     	parse_json(event_details):recipe_id as recipe_id,
