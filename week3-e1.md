@@ -26,7 +26,6 @@ session_lengths as (
         min(event_timestamp) as min_time, 
         max(event_timestamp) as max_time, 
         timediff(second,min_time,max_time) as session_length
-        
     from vk_data.events.website_activity 
     group by 1, 2
     having session_length > 0
@@ -47,7 +46,8 @@ session_search_counts as (
         date(event_timestamp) as dayt,
     	sum( case when parse_json(event_details):event = 'search' then 1 else 0 end) as session_searches, 
         sum( case when parse_json(event_details):event = 'view_recipe' then 1 else 0 end) as recipes_viewed
-    from vk_data.events.website_activity 
+    from vk_data.events.website_activity
+    where parse_json(event_details):event in ('search','view_recipe')
     group by 1,2
     having recipes_viewed > 0
 ),
@@ -61,9 +61,9 @@ daily_search_average as (
 )
 
 
-select tr.dayt, recipe_id, average_session_length, average_searches, session_count
+select tr.dayt, recipe_id as top_recipe_id, average_session_length, average_searches, session_count
 from top_recipes as tr 
-	left join daily_search_average as dsa on tr.dayt = dsa.dayt 
-	left join daily_session_lengths as dsl on tr.dayt = dsl.dayt
-    left join daily_unique_sessions as dus on tr.dayt = dus.dayt
+	inner join daily_search_average as dsa on tr.dayt = dsa.dayt 
+	inner join daily_session_lengths as dsl on tr.dayt = dsl.dayt
+    inner join daily_unique_sessions as dus on tr.dayt = dus.dayt
 order by dayt
