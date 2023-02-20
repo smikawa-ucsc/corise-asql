@@ -1,3 +1,5 @@
+/* The query profiler helps illuminate how many rows are being operated on at each step. My main takeaway was to use where's and groupings liberally early on to reduce the result sets for later steps where possible. */
+
 
 with top_recipes as (
     select 
