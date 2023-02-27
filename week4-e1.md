@@ -17,7 +17,7 @@ with customer_last_order as (
 ),
 
 /* determine the 3 highest dollar orders */
-highest_dollar_orders as (
+orders_ranked as (
 	select 
     	c_custkey,
         o_orderkey,
@@ -30,12 +30,12 @@ highest_dollar_orders as (
 ),
 
 /* aggregate the 3 highest dollar orders; total spent and order keys */
-orderlist as (
+orders_agg as (
     select 
     	c_custkey,
      	listagg(o_orderkey,',') within group (order by o_totalprice desc) as highest_orderkeys,
         sum(o_totalprice) as total_spent
-    from highest_dollar_orders
+    from orders_ranked
     group by 1
 ),
 
@@ -81,7 +81,7 @@ select
     replace(get(split(partsqty,','),2),'"','') as part_3_quantity,
     replace(get(split(partsprice,','),2),'"','') as part_3_total_spent
 from customer_last_order
-	natural join orderlist 
+	natural join orders_agg 
     natural join partslist_agg
 order by last_order_date desc
 limit 100
