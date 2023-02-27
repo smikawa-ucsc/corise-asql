@@ -8,12 +8,12 @@
 with customer_last_order as (
 	select 
     	c_custkey, 
-    	o_orderdate as last_order_date
+    	max(o_orderdate) as last_order_date
     from customer 
     	inner join orders on c_custkey = o_custkey
     where c_mktsegment = 'AUTOMOBILE' 
     	and o_orderpriority = '1-URGENT'
-    qualify row_number() over (partition by o_custkey order by o_orderdate desc) = 1
+    group by 1
 ),
 
 /* determine the 3 highest dollar orders */
@@ -83,5 +83,16 @@ select
 from customer_last_order
 	natural join orders_agg 
     natural join partslist_agg
+where c_custkey = '68000'
 order by last_order_date desc
 limit 100
+
+/*
+Review of candidate submission:
+1) Do you agree with the results returned by the query? 
+	I do not.  The last order date was restricted by the most-spend filter, so it's not truly the last order date among urgent orders.
+2) Is it easy to understand?
+	Relatively. I would say yes, the error is logical and not necessarily obfuscated by naming or formatting.
+3) Could the code be more efficient?
+	The parts join could be removed.  The parts key can be just used from the lineitem.
+*/
